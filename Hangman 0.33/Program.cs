@@ -15,7 +15,7 @@ namespace Hangman_0._33
         static Char[] maskedWord;
         static string usedCharacter;
         static char playerGuess;
-        static int playerLives = 10;
+        static int playerLives = 3;
         #endregion
         static void Main(string[] args)
         {
@@ -168,7 +168,8 @@ namespace Hangman_0._33
 
         private static void WordGenerator()
         {
-            string[] hiddenWordEasy = new string[] { "APA", "TROLL", "STEG", "BEBIS", "MAN", "KVINNA", "MORGON", "FEST", "SOL", "BAD" };
+            //"APA", "TROLL", "STEG", "BEBIS", "MAN", "KVINNA", "MORGON", "FEST", "SOL",
+            string[] hiddenWordEasy = new string[] {  "BAD", "BAD", "BAD", "BAD", "BAD", "BAD", "BAD", "BAD", "BAD", "BAD", "BAD", };
             string[] hiddenWordNormal = new string[] { "HÖGER", "VATTEN", "STJÄRNA", "DATOR", "LASTBIL", "BYXOR", "VÄSKA", "PRINSESSA", "TRAFIK", "ZLATAN" };
             string[] hiddenWordHard = new string[] { "PROGRAMMERING", "SUNDBYBERG", "CIGARETTER", "POKEMON", "HANGMAN", "FLYGPLAN", "DIAGNOS", "SJUKDOM", "SYNONYM", "SJUKSKÖTERSKA" };
 
@@ -235,13 +236,16 @@ namespace Hangman_0._33
         private static void GameLoop()
         {
             WordGenerator();
+            while (true)
+            {
+                
 
-            Guess();
-            PlayerGuess();
-            Interface();
-            Console.WriteLine("här har vi gömda ordet" + hiddenWord);
-            Timer(2);
-            BackToStart();
+                Guess();
+                CompareWord();
+                if (CompareWord() == true) return;
+                
+
+            }
         }
 
         private static bool Guess()
@@ -274,10 +278,9 @@ namespace Hangman_0._33
                     {
                         input = input.ToUpper();
                         playerGuess = Char.Parse(input);                      
-                       Console.WriteLine("Bra jobbat!! En bokstav rätt");
-                        Console.WriteLine(playerGuess);
-                        Console.ReadLine();
-                        return (false);
+                       Console.WriteLine("Du gissade på: {0} ",playerGuess);
+                            
+                        return false;
                     }
 
                     else
@@ -285,7 +288,7 @@ namespace Hangman_0._33
                         Console.WriteLine("Var vänlig och mata in en Bokstav, tack");
                         Timer(1);
                         Console.Clear();
-                        return (true);
+                        return true;
                     }
                 }
             }
@@ -323,15 +326,17 @@ namespace Hangman_0._33
             { 
                 Timer(1);
                 Winner();
+                return true;
             }
-            else if (playerLives<1)
+            else if (playerLives==0)
             {
-                Timer(0.5);
+                Timer(1);
                 Loser();
+                return true;
             }
-            
-          
 
+
+            return false;
             
         }
 
@@ -339,9 +344,10 @@ namespace Hangman_0._33
         {
             Timer(0.5);
             Console.Clear();
-            Console.WriteLine("Dödstraffet är förbjudet enligt FN:regler");
-            Timer(1.5);
-            Console.WriteLine("men inte här för du visste att din gubbe hängs om du misslyckas");
+            Console.WriteLine("\n\nDödstraffet är förbjudet enligt FN:regler");
+            Timer(3.5);
+            Console.WriteLine("\n\nmen inte här för du visste att din gubbe hängs om du misslyckas");
+            Timer(3);
             Console.WriteLine("\n");
             Console.WriteLine("  ___________.._______");
             Console.WriteLine("| .__________))______ |");
@@ -378,12 +384,7 @@ namespace Hangman_0._33
             Timer(1);
             BackToStart();
         }
-
-        private static void Interface()
-        {
-
-        }
-
+        
         private static void BackToStart()
         {
             Console.Clear();
