@@ -383,7 +383,7 @@ namespace Hangman_0._33
 
         }
 
-        public static void Timer(double seconds)
+        public static void Timer(double seconds)//timer med input(double)
         {
             {
                 double sec = seconds;
