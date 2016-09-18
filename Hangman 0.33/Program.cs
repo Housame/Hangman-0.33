@@ -14,6 +14,8 @@ namespace Hangman_0._33
         static string hiddenWord;
         static Char[] maskedWord;
         static string usedCharacter;
+        static char playerGuess;
+        static int playerLives = 10;
         #endregion
         static void Main(string[] args)
         {
@@ -244,7 +246,7 @@ namespace Hangman_0._33
 
         private static bool Guess()
         {
-            //blaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+            
             while (true)
             {
                 maskedWord = new char[hiddenWord.Length];
@@ -255,23 +257,25 @@ namespace Hangman_0._33
 
                 }
                 Console.WriteLine();
-                Console.WriteLine("skriv: ");
+                Console.WriteLine("Ange en bokstav, tack!: ");
                 string input = Console.ReadLine();
-                if (input.Length > 1)
+                if (!(input.Length == 1))
                 {
                     Console.WriteLine("Var vänlig och mata in en Bokstav, tack");
+                    input = null;
                     Timer(1);
-
 
                 }
                 else
                 {
                     bool result = input.All(Char.IsLetter);
+                    
                     if (result)
                     {
                         input = input.ToUpper();
-                        char input1 = Char.Parse(input);
-                        Console.WriteLine(input1);
+                        playerGuess = Char.Parse(input);                      
+                       Console.WriteLine("Bra jobbat!! En bokstav rätt");
+                        Console.WriteLine(playerGuess);
                         Console.ReadLine();
                         return (false);
                     }
@@ -295,9 +299,84 @@ namespace Hangman_0._33
 
         }
 
-        private static bool CompareWord(bool v)
+        private static bool CompareWord()
         {
-            throw new NotImplementedException();
+            bool condition = false;
+            int winCounter = 0;
+            for (int i = 0; i < hiddenWord.Length; i++)
+            {
+                if (playerGuess == hiddenWord[i])
+                {
+                    maskedWord[i] = playerGuess;
+                    condition = true;
+                }
+            }
+            if (condition==true)
+                {
+                winCounter++;
+                }
+            else if (condition ==false)
+            {
+                playerLives--;
+            }
+            if (winCounter==hiddenWord.Length)
+            { 
+                Timer(1);
+                Winner();
+            }
+            else if (playerLives<1)
+            {
+                Timer(0.5);
+                Loser();
+            }
+            
+          
+
+            
+        }
+
+        private static void Loser()
+        {
+            Timer(0.5);
+            Console.Clear();
+            Console.WriteLine("Dödstraffet är förbjudet enligt FN:regler");
+            Timer(1.5);
+            Console.WriteLine("men inte här för du visste att din gubbe hängs om du misslyckas");
+            Console.WriteLine("\n");
+            Console.WriteLine("  ___________.._______");
+            Console.WriteLine("| .__________))______ |");
+            Console.WriteLine("| | / /      ||");
+            Console.WriteLine("| |/ /       ||");
+            Console.WriteLine("| | /        ||.- ''.");
+            Console.WriteLine("| |/         |/ _  \"");
+            Console.WriteLine("| |          ||  `/,|");
+            Console.WriteLine("| |         (\\`_.'");
+            Console.WriteLine("| |         .-`--'.");
+            Console.WriteLine("| |        / Y. .Y\"");
+            Console.WriteLine("| |       // |   | \\");
+            Console.WriteLine("| |      //  | . |  \\");
+            Console.WriteLine("| |     ')   |   |   (`");
+            Console.WriteLine("| |          || '||");
+            Console.WriteLine("| |          || ||");
+            Console.WriteLine("| |          || ||");
+            Console.WriteLine("| |          || ||");
+            Console.WriteLine("| |         / | | \"");
+            Console.WriteLine("          | _`-' `-' |    |  ");
+            Console.WriteLine("||||||||||||||||||||||||||||| |");
+            Console.WriteLine("| ||||||||||||||||||||||||||| |");
+            Console.WriteLine(": ::::::::::::::::::::::::::: :  ");
+            Console.WriteLine(". ........................... .");
+            Timer(1.5);
+            BackToStart();
+            
+        }
+
+        private static void Winner()
+        {
+            Console.Clear();
+            Console.WriteLine("\n\nBra jobbat {0} !,Du avslöjade ordet och räddade gubben från att hängas!!", player.name);
+            Timer(1);
+            BackToStart();
         }
 
         private static void Interface()
