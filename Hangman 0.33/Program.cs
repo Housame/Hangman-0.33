@@ -15,7 +15,7 @@ namespace Hangman_0._33
         static Char[] maskedWord;
         static string usedCharacter;
         static char playerGuess;
-        static int playerLives = 3;
+        static int playerLives;
         #endregion
         static void Main(string[] args)
         {
@@ -161,15 +161,17 @@ namespace Hangman_0._33
 
         private static void StartGame()
         {
-            Level();
-            WordGenerator();
-            GameLoop();
+            
+                Level();
+                GameLoop();
+            
         }
 
         private static void WordGenerator()
         {
-            //"APA", "TROLL", "STEG", "BEBIS", "MAN", "KVINNA", "MORGON", "FEST", "SOL",
-            string[] hiddenWordEasy = new string[] {  "BAD", "BAD", "BAD", "BAD", "BAD", "BAD", "BAD", "BAD", "BAD", "BAD", "BAD", };
+            
+            //
+            string[] hiddenWordEasy = new string[] { "APA", "TROLL", "STEG", "BEBIS", "MAN", "KVINNA", "MORGON", "FEST", "SOL", "BAD" };
             string[] hiddenWordNormal = new string[] { "HÖGER", "VATTEN", "STJÄRNA", "DATOR", "LASTBIL", "BYXOR", "VÄSKA", "PRINSESSA", "TRAFIK", "ZLATAN" };
             string[] hiddenWordHard = new string[] { "PROGRAMMERING", "SUNDBYBERG", "CIGARETTER", "POKEMON", "HANGMAN", "FLYGPLAN", "DIAGNOS", "SJUKDOM", "SYNONYM", "SJUKSKÖTERSKA" };
 
@@ -211,21 +213,24 @@ namespace Hangman_0._33
                         chosenLevel = "Easy";
                         Timer(1);
                         Console.Clear();
-                        GameLoop();
+                        WordGenerator();
+                        playerLives = 7;
                         break;
                     case 2:
                         Console.WriteLine("Du valde Mellan!! Spelet böjar strax!!");
                         chosenLevel = "Normal";
                         Timer(1);
                         Console.Clear();
-                        GameLoop();
+                        WordGenerator();
+                        playerLives = 5;
                         break;
                     case 3:
                         Console.WriteLine("Du valde Svår!! Spelet böjar strax!!");
                         chosenLevel = "Hard";
                         Timer(1);
                         Console.Clear();
-                        GameLoop();
+                        WordGenerator();
+                        playerLives = 3;
                         break;
 
                 }
@@ -235,13 +240,19 @@ namespace Hangman_0._33
 
         private static void GameLoop()
         {
-            WordGenerator();
+            maskedWord = new char[hiddenWord.Length];
+            for (int i = 0; i < hiddenWord.Length; i++)
+            {
+                maskedWord[i] = '_';
+                Console.Write(" " + maskedWord[i]);
+
+            }
             while (true)
             {
                 
 
                 Guess();
-                CompareWord();
+                
                 if (CompareWord() == true) return;
                 
 
@@ -253,15 +264,11 @@ namespace Hangman_0._33
             
             while (true)
             {
-                maskedWord = new char[hiddenWord.Length];
-                for (int i = 0; i < hiddenWord.Length; i++)
-                {
-                    maskedWord[i] = '_';
-                    Console.Write(" " + maskedWord[i]);
-
-                }
+                
+               
                 Console.WriteLine();
                 Console.WriteLine("Ange en bokstav, tack!: ");
+                Console.WriteLine("Du har {0} liv kvar!",playerLives);
                 string input = Console.ReadLine();
                 if (!(input.Length == 1))
                 {
@@ -305,25 +312,33 @@ namespace Hangman_0._33
         private static bool CompareWord()
         {
             bool condition = false;
-            int winCounter = 0;
+            
             for (int i = 0; i < hiddenWord.Length; i++)
             {
-                if (playerGuess == hiddenWord[i])
+                if (hiddenWord[i] == playerGuess)
                 {
                     maskedWord[i] = playerGuess;
                     condition = true;
                 }
             }
-            if (condition==true)
-                {
-                winCounter++;
-                }
-            else if (condition ==false)
+            if (condition == false)
             {
                 playerLives--;
             }
-            if (winCounter==hiddenWord.Length)
-            { 
+            if (condition==true)
+                {
+                Console.WriteLine("Du gissade rätt!!Bra gjort");         
+                }
+             
+            int winCounter = 0;
+            for (int i = 0; i < hiddenWord.Length; i++)
+            {
+                if (maskedWord[i] == hiddenWord[i])
+                    winCounter++;
+            }
+
+            if (winCounter == hiddenWord.Length)
+            {
                 Timer(1);
                 Winner();
                 return true;
@@ -372,7 +387,7 @@ namespace Hangman_0._33
             Console.WriteLine("| ||||||||||||||||||||||||||| |");
             Console.WriteLine(": ::::::::::::::::::::::::::: :  ");
             Console.WriteLine(". ........................... .");
-            Timer(1.5);
+            Timer(4);
             BackToStart();
             
         }
