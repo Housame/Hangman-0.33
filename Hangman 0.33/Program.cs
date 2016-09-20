@@ -244,19 +244,27 @@ namespace Hangman_0._33
             for (int i = 0; i < hiddenWord.Length; i++)
             {
                 maskedWord[i] = '_';
-                Console.Write(" " + maskedWord[i]);
+                
 
             }
             while (true)
-            {
-                
-
+            {                
+                Interface();
                 Guess();
-                
+
                 if (CompareWord() == true) return;
                 
 
             }
+        }
+
+        private static void Interface()
+        {
+            for (int i = 0; i < hiddenWord.Length; i++)
+                Console.Write(" " + maskedWord[i]);
+
+            Console.WriteLine();
+
         }
 
         private static bool Guess()
